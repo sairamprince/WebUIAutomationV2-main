@@ -22,7 +22,6 @@ public class Base {
 			driver = new ChromeDriver();
 			driver.manage().window().maximize();
 			driver.manage().deleteAllCookies();
-			//driver.mardycy
 			/*System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/resources/drivers/chromedriver.exe");
 			if(prop.getProperty("headless").equals("yes")){								
 				//headless mode:
