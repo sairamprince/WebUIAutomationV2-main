@@ -4,6 +4,7 @@ package com.rgt.utils;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Date;
 import java.util.logging.FileHandler;
 
@@ -59,7 +60,7 @@ public class CommonUtils
 
 	public void explicitWait(WebDriver driver,String locatorType, String locatorValue, int inuputValue) 
 	{
-		WebDriverWait wait= new WebDriverWait(driver, inuputValue);
+		WebDriverWait wait= new WebDriverWait(driver,inuputValue);
 		switch(locatorType) 
 		{
 		case "id":
