@@ -81,10 +81,10 @@ public class TestData
 		 TestSteps = testSteps;
 	 }
 	 
-	/* public String toString() {
+	public String toString() {
 		 return "Testdata [TC_ID="+TC_ID+", ToBeExecuted="+ToBeExecuted+", Steps="+Steps+",TestCase="+TestCase+", LocatorType="+LocatorType+",LocatorValue"+LocatorValue+",InputValue="+InputValue+",Action="+Action+",TestSteps="+TestSteps+"]";
 		 
-	 }*/
+	 }
 	 
 	
 

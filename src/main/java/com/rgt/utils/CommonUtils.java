@@ -1,6 +1,11 @@
+
 package com.rgt.utils;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.FileHandler;
 
 import org.apache.tools.ant.util.FileUtils;
 import org.openqa.selenium.By;
@@ -17,8 +22,7 @@ import com.aventstack.extentreports.ExtentTest;
 public class CommonUtils 
 {
 
-
-	public WebElement getLocators(WebDriver driver,String locatorType, String locatorValue) 
+	public WebElement getLocators(WebDriver driver,String locatorType, String locatorValue)
 	{
 		WebElement element = null;
 		switch(locatorType) 
@@ -84,4 +88,5 @@ public class CommonUtils
 			break;
 		}
 	}
+
 }

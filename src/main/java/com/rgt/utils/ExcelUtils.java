@@ -19,32 +19,24 @@ public class ExcelUtils
 			e.printStackTrace();
 		}
 	}
-	public List<TestData> getTestdata(){
+	public List<TestData> getTestSteps(String TC_ID){
 		List<TestData> listTestCaseDetails = new ArrayList<TestData>();
 		try {
-			String selectQuery1 = "select * from TC_Master where ToBeExecuted='Y'";
-			Recordset recordset1 = connection.executeQuery(selectQuery1);
+			String selectQuery = "select * from TC_Steps where TC_ID='"+TC_ID+"' and ToBeExecuted='Y'";
+			Recordset recordset = connection.executeQuery(selectQuery);
 
-			while(recordset1.next()) {
-
-				String selectQuery = "select * from TC_Steps where TC_ID='"+recordset1.getField("TC_ID")+"' and ToBeExecuted='Y'";
-				Recordset recordset = connection.executeQuery(selectQuery);
-
-				while (recordset.next()) {
-					TestData data = new TestData();
-					data.setTC_ID(recordset.getField("TC_ID"));
-					data.setTestCase(recordset.getField("TestCase"));
-					data.setToBeExecuted(recordset1.getField("ToBeExecuted"));
-					data.setSteps(recordset.getField("Steps"));
-					data.setLocatorType(recordset.getField("LocatorType"));
-					data.setAction(recordset.getField("Action"));
-					data.setLocatorValue(recordset.getField("LocatorValue"));
-					data.setInputValue(recordset.getField("InputValue"));
-					data.setTestSteps(recordset.getField("TestSteps"));
-					listTestCaseDetails.add(data);
-					//System.out.println(listTestCaseDetails.get(0).getTestCase());
-
-				}
+			while (recordset.next()) {
+				TestData data = new TestData();
+				data.setTC_ID(recordset.getField("TC_ID"));
+				data.setSteps(recordset.getField("Steps"));
+				data.setTestCase(recordset.getField("TestCase"));
+				data.setTestSteps(recordset.getField("TestSteps"));
+				data.setToBeExecuted(recordset.getField("ToBeExecuted"));
+				data.setLocatorType(recordset.getField("LocatorType"));
+				data.setLocatorValue(recordset.getField("LocatorValue"));
+				data.setAction(recordset.getField("Action"));
+				data.setInputValue(recordset.getField("InputValue"));
+				listTestCaseDetails.add(data);
 			}
 
 		} catch (Exception e) {
@@ -60,14 +52,11 @@ public class ExcelUtils
 
 			while(recordset.next()) {
 
-
 				TCMaster data = new TCMaster();
 				data.setTC_ID(recordset.getField("TC_ID"));
 				data.setTestCase(recordset.getField("TestCase"));
 				data.setToBeExecuted(recordset.getField("ToBeExecuted"));
 				listTestCases.add(data);
-				//System.out.println(listTestCaseDetails.get(0).getTestCase());
-
 			}
 		}
 
