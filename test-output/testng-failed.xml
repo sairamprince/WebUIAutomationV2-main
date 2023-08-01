@@ -5,7 +5,7 @@
     <classes>
       <class name="com.rgt.runner.WebTest">
         <methods>
-          <include name="runner"/>
+          <include name="test"/>
         </methods>
       </class> <!-- com.rgt.runner.WebTest -->
     </classes>
