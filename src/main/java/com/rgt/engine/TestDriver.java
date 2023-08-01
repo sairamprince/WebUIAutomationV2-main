@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -99,8 +100,8 @@ public class TestDriver
 	public final String ExtentReport_Path = System.getProperty("user.dir")+"/resources/reports/WebReport.html";
 	public final String ExcelReport_Path = System.getProperty("user.dir")+"/resources/reports/ExcelReport.xlsx";
 
-	//public void startExecution() throws IOException, DocumentException {
-	public void startExecution(String tc_master) throws IOException, DocumentException {
+	public void startExecution() throws IOException, DocumentException {
+	//public void startExecution(String tc_master) throws IOException, DocumentException {
 		commonUtils= new CommonUtils();
 		extentreport = new ExtentReports();
 		spark = new ExtentSparkReporter(ExtentReport_Path).viewConfigurer().viewOrder().as(new ViewName[] {ViewName.TEST,ViewName.DASHBOARD,ViewName.CATEGORY,ViewName.DEVICE,ViewName.EXCEPTION }).apply();
@@ -115,8 +116,8 @@ public class TestDriver
 		extentreport.setSystemInfo("OS", System.getProperty("os.name"));
 		extentreport.setSystemInfo("Java Version", System.getProperty("java.version"));
 
-		excel = new ExcelUtils(tc_master);
-		//excel = new ExcelUtils(SCENARIO_SHEET_PATH);
+		//excel = new ExcelUtils(tc_master);
+		excel = new ExcelUtils(SCENARIO_SHEET_PATH);
 		int testCaseCount = excel.getTCMaster().size();
 		System.out.println("Number of TestCases to be Executing = "+testCaseCount);
 
@@ -214,7 +215,7 @@ public class TestDriver
 						break;
 
 					case "IMPLICITLYWAIT":
-						driver.manage().timeouts().implicitlyWait(Integer.parseInt(excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getInputValue().trim()), TimeUnit.SECONDS);
+						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Integer.parseInt(excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getInputValue().trim())*1000));
 						extentTest.pass( excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getTestSteps().trim()+"--Implicit Wait");
 						System.out.println(excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getTestSteps().trim() +"--"+ excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getInputValue().trim());
 						break;

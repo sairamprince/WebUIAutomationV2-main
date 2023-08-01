@@ -20,6 +20,7 @@ import org.testng.ITestContext;
 
 import com.aventstack.extentreports.ExtentTest;
 
+
 public class CommonUtils 
 {
 
@@ -60,34 +61,36 @@ public class CommonUtils
 
 	public void explicitWait(WebDriver driver,String locatorType, String locatorValue, int inuputValue) 
 	{
-		WebDriverWait wait= new WebDriverWait(driver,inuputValue);
+		WebDriverWait  wait = new WebDriverWait(driver,Duration.ofSeconds(inuputValue));
 		switch(locatorType) 
 		{
 		case "id":
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(locatorValue)));
+			wait.until((WebDriver d) -> ExpectedConditions.visibilityOfElementLocated(By.id(locatorValue)).apply(d));
 			break;
 		case "xpath":
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(locatorValue)));
+			wait.until((WebDriver d) -> ExpectedConditions.visibilityOfElementLocated(By.xpath(locatorValue)).apply(d));
 			break;
 		case "linkText":
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.linkText(locatorValue)));
+			wait.until((WebDriver d) -> ExpectedConditions.visibilityOfElementLocated(By.linkText(locatorValue)).apply(d));
 			break;
 		case "partialLinkText":
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.partialLinkText(locatorValue)));
+			wait.until((WebDriver d) -> ExpectedConditions.visibilityOfElementLocated(By.partialLinkText(locatorValue)).apply(d));
 			break;
 		case "name":
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.name(locatorValue)));
+			wait.until((WebDriver d) -> ExpectedConditions.visibilityOfElementLocated(By.name(locatorValue)).apply(d));
 			break;
 		case "className":
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className(locatorValue)));
+			wait.until((WebDriver d) -> ExpectedConditions.visibilityOfElementLocated(By.className(locatorValue)).apply(d));
 			break;
 		case "cssSelector":
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(locatorValue)));
+			wait.until((WebDriver d) -> ExpectedConditions.visibilityOfElementLocated(By.cssSelector(locatorValue)).apply(d));
 			break;
 		case "tagName":
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName(locatorValue)));
+			wait.until((WebDriver d) -> ExpectedConditions.visibilityOfElementLocated(By.tagName(locatorValue)).apply(d));
 			break;
 		}
+
 	}
+
 
 }
