@@ -95,8 +95,8 @@ public class TestDriver
 	Select selectDropDown;
 	Actions act;
 
-	//public final String SCENARIO_SHEET_PATH = System.getProperty("user.dir")+"/resources/datafiles/TC_Master.xlsx";
-	public final String SCENARIO_SHEET_PATH = System.getProperty("testCaseFile");
+	public final String SCENARIO_SHEET_PATH = System.getProperty("user.dir")+"/resources/datafiles/TC_Master.xlsx";
+	//public final String SCENARIO_SHEET_PATH = System.getProperty("testCaseFile");
 	public final String ExtentReport_Path = System.getProperty("user.dir")+"/resources/reports/WebReport.html";
 	public final String ExcelReport_Path = System.getProperty("user.dir")+"/resources/reports/ExcelReport.xlsx";
 
