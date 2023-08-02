@@ -60,7 +60,7 @@ public class CommonUtils
 
 	public void explicitWait(WebDriver driver,String locatorType, String locatorValue, int inuputValue) 
 	{
-		WebDriverWait wait= new WebDriverWait(driver,inuputValue);
+		WebDriverWait wait= new WebDriverWait(driver,Duration.ofSeconds(inuputValue));
 		switch(locatorType) 
 		{
 		case "id":
