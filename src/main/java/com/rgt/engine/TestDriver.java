@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -52,6 +53,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jsoup.Jsoup;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -97,11 +99,11 @@ public class TestDriver
 
 	public final String SCENARIO_SHEET_PATH = System.getProperty("user.dir")+"/resources/datafiles/TC_Master.xlsx";
 	//public final String SCENARIO_SHEET_PATH = System.getProperty("testCaseFile");
-	public final String ExtentReport_Path = System.getProperty("user.dir")+"/resources/reports/WebReport.html";
+	public final String ExtentReport_Path = System.getProperty("user.dir")+"/resources/reports/WebAutomationReport.html";
 	public final String ExcelReport_Path = System.getProperty("user.dir")+"/resources/reports/ExcelReport.xlsx";
 
 	public void startExecution() throws IOException, DocumentException {
-	//public void startExecution(String tc_master) throws IOException, DocumentException {
+		//public void startExecution(String tc_master) throws IOException, DocumentException {
 		commonUtils= new CommonUtils();
 		extentreport = new ExtentReports();
 		spark = new ExtentSparkReporter(ExtentReport_Path).viewConfigurer().viewOrder().as(new ViewName[] {ViewName.TEST,ViewName.DASHBOARD,ViewName.CATEGORY,ViewName.DEVICE,ViewName.EXCEPTION }).apply();
@@ -120,6 +122,16 @@ public class TestDriver
 		excel = new ExcelUtils(SCENARIO_SHEET_PATH);
 		int testCaseCount = excel.getTCMaster().size();
 		System.out.println("Number of TestCases to be Executing = "+testCaseCount);
+
+		// Clean up old screenshots before capturing a new screenshot
+		File screenshotFolder2 = new File("Failed-Screenshots/");
+		File[] screenshotFiles2 = screenshotFolder2.listFiles();
+
+		if (screenshotFiles2 != null) {
+			for (File oldScreenshot : screenshotFiles2) {
+				oldScreenshot.delete();
+			}
+		}
 
 
 		try {
@@ -161,14 +173,17 @@ public class TestDriver
 			fileInputStream.close();
 			fileOutputStream.close();
 			workbook.close();
-			System.out.println("HTML report converted to Excel successfully!");
+			//System.out.println("HTML report converted to Excel successfully!");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		
 
 		for(int j=0;j<testCaseCount;j++) {
 			extentTest=extentreport.createTest(excel.getTCMaster().get(j).getTestCase());
 			int count = excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).size();
+			System.out.println("Number of TestCases to be Executing = "+count);
 			for (int i = 0; i < count; i++) {
 
 				try {
@@ -215,7 +230,7 @@ public class TestDriver
 						break;
 
 					case "IMPLICITLYWAIT":
-						driver.manage().timeouts().implicitlyWait(Integer.parseInt(excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getInputValue().trim()), TimeUnit.SECONDS);
+						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Integer.parseInt(excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getInputValue().trim())));
 						extentTest.pass( excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getTestSteps().trim()+"--Implicit Wait");
 						System.out.println(excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getTestSteps().trim() +"--"+ excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getInputValue().trim());
 						break;
@@ -262,7 +277,28 @@ public class TestDriver
 						{
 							extentTest.pass(excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getTestSteps().trim()+"--"+"Actual:"+actualText+"--Expected:"+excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getInputValue().trim());
 						}else {
-							extentTest.fail(excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getTestSteps().trim()+"--"+"Actual:"+actualText+"--Expected:"+excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getInputValue().trim());
+							extentTest.fail(MarkupHelper.createLabel(excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getTestSteps().trim() + "  is Failed", ExtentColor.RED));
+							SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd_HHmmss");
+							String timeandDate1 = dateFormat1.format(new Date());
+							String screenshotPath = "Failed-Screenshots/Failed_Screenshot_"+timeandDate1+".png";
+							File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+							String base64String = "";
+							try {
+								byte[] screenshotBytes = Files.readAllBytes(screenshotFile.toPath());
+								base64String = Base64.getEncoder().encodeToString(screenshotBytes);
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
+							try {
+								FileUtils.copyFile(screenshotFile, new File(screenshotPath));
+							} catch (IOException e1) {
+								e1.printStackTrace();
+							}
+							if (base64String != null) {
+								String base64ScreenshotPath = "<a href='data:image/png;base64," + base64String + "' data-featherlight='image'><img src='data:image/png;base64," + base64String + "'/></a>";
+								extentTest.fail(MarkupHelper.createLabel(base64ScreenshotPath, ExtentColor.RED));
+							}
+							extentTest.fail(excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getTestSteps().trim()+"--"+"Actual:"+actualText+"--Expected:"+excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getInputValue().trim()+ " - Test case failed", MediaEntityBuilder.createScreenCaptureFromBase64String(base64String).build());
 						}
 
 						System.out.println(excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getTestSteps().trim()+"--"+ excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getInputValue().trim());
@@ -379,6 +415,11 @@ public class TestDriver
 						System.out.println(excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getTestSteps().trim() +"--"+ excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getInputValue().trim());
 						break;
 
+					case"SCROLL_TO_VISIBLE_ELEMENT":
+						element=commonUtils.getLocators(driver,excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getLocatorType().trim(), excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getLocatorValue().trim());
+						((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();", element);
+						break;
+
 						//case"SLIDER":
 						//element=commonUtils.getLocators(driver,excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getLocatorType().trim(), excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getLocatorValue().trim());
 						//act = new Actions(driver);
@@ -410,6 +451,16 @@ public class TestDriver
 						break;
 
 					case "SCREENSHOT":
+						// Clean up old screenshots before capturing a new screenshot
+						File screenshotFolder = new File("Screenshots/");
+						File[] screenshotFiles = screenshotFolder.listFiles();
+
+						if (screenshotFiles != null) {
+							for (File oldScreenshot : screenshotFiles) {
+								oldScreenshot.delete();
+							}
+						}
+
 						element = commonUtils.getLocators(driver, excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getLocatorType().trim(), excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getLocatorValue().trim());
 						String screenshotFolderPath = "Screenshots/";
 						File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
@@ -438,6 +489,15 @@ public class TestDriver
 						break;
 
 					case"ELEMENT_SCREENSHOT":
+						// Clean up old screenshots before capturing a new screenshot
+						File screenshotFolder1 = new File("Element-Screenshots/");
+						File[] screenshotFiles1 = screenshotFolder1.listFiles();
+
+						if (screenshotFiles1 != null) {
+							for (File oldScreenshot : screenshotFiles1) {
+								oldScreenshot.delete();
+							}
+						}
 						element = commonUtils.getLocators(driver, excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getLocatorType().trim(), excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getLocatorValue().trim());
 						String screenshotFolderPath1 = "Element-Screenshots/";
 						File srcfile = element.getScreenshotAs(OutputType.FILE);
@@ -501,6 +561,7 @@ public class TestDriver
 					String screenshotPath = "Failed-Screenshots/Failed_Screenshot_"+timeandDate1+".png";
 					File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 					String base64String = "";
+
 					try {
 						byte[] screenshotBytes = Files.readAllBytes(screenshotFile.toPath());
 						base64String = Base64.getEncoder().encodeToString(screenshotBytes);
