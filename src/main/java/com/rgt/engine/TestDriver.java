@@ -177,15 +177,15 @@ public class TestDriver
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
+
+
 
 		for(int j=0;j<testCaseCount;j++) {
 			extentTest=extentreport.createTest(excel.getTCMaster().get(j).getTestCase());
 			int count = excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).size();
 			System.out.println("Number of TestCases to be Executing = "+count);
-			for (int i = 0; i < count; i++) {
-
+			for (int i = 0; i < count; i++) 
+			{
 				try {
 					switch (excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getAction().trim()) 
 					{
@@ -562,18 +562,22 @@ public class TestDriver
 					File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 					String base64String = "";
 
-					try {
+					try 
+					{
 						byte[] screenshotBytes = Files.readAllBytes(screenshotFile.toPath());
 						base64String = Base64.getEncoder().encodeToString(screenshotBytes);
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
-					try {
+					try 
+					{
 						FileUtils.copyFile(screenshotFile, new File(screenshotPath));
-					} catch (IOException e1) {
+					} catch (IOException e1) 
+					{
 						e1.printStackTrace();
 					}
-					if (base64String != null) {
+					if (base64String != null) 
+					{
 						String base64ScreenshotPath = "<a href='data:image/png;base64," + base64String + "' data-featherlight='image'><img src='data:image/png;base64," + base64String + "'/></a>";
 						extentTest.fail(MarkupHelper.createLabel(base64ScreenshotPath, ExtentColor.RED));
 					}
@@ -583,7 +587,6 @@ public class TestDriver
 			}
 		}
 	}
-
 }
 
 
