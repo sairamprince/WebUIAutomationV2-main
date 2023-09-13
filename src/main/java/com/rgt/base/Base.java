@@ -32,27 +32,16 @@ public class Base {
 			driver = new ChromeDriver();
 			driver.manage().window().maximize();
 			driver.manage().deleteAllCookies();
-			/*System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/resources/drivers/chromedriver.exe");
-			if(prop.getProperty("headless").equals("yes")){								
-				//headless mode:
-				ChromeOptions options = new ChromeOptions();
-				options.addArguments("--headless");
-				driver = new ChromeDriver(options);
-				driver.manage().window().maximize();
-			}else{
-				driver = new ChromeDriver();
-				driver.manage().window().maximize();
-			}*/
+			
 		} else if(browserName.equals("firefox")){
-			//System.setProperty("webdriver.gecko.driver",  System.getProperty("user.dir")+"/resources/drivers/geckodriver.exe");
 			WebDriverManager.firefoxdriver().setup();
 			driver = new FirefoxDriver();
 			driver.manage().window().maximize();
 			driver.manage().deleteAllCookies();
 			
 		}else if(browserName.equals("edge")){
-			//System.setProperty("webdriver.edge.driver",  System.getProperty("user.dir")+"/resources/drivers/msedgedriver.exe");
-			WebDriverManager.edgedriver().setup();			driver = new EdgeDriver();
+			WebDriverManager.edgedriver().setup();			
+			driver = new EdgeDriver();
 			driver.manage().window().maximize();
 			driver.manage().deleteAllCookies();
 		}

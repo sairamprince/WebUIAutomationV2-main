@@ -6,14 +6,15 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.lowagie.text.DocumentException;
+import com.rgt.engine.RetryAnalyzer;
 import com.rgt.engine.TestDriver;
 
 
 public class WebTest
 {
 	//@Parameters("tc_master")
-	@Test
 	//public void runner(String tc_master) throws IOException, InterruptedException, DocumentException
+	 @Test(retryAnalyzer = RetryAnalyzer.class)
 	public void runner() throws IOException, InterruptedException, DocumentException
 	{
 		TestDriver td= new TestDriver();

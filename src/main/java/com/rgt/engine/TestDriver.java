@@ -15,6 +15,9 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.testng.IRetryAnalyzer;
+import org.testng.ITestResult;
+
 import com.aventstack.*;
 import com.aventstack.extentreports.io.BufferedWriterWriter;
 
@@ -65,6 +68,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.ITestListener;
+import org.testng.annotations.Test;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import com.aventstack.extentreports.ExtentReports;
@@ -98,7 +102,7 @@ public class TestDriver
 	Actions act;
 
 	public final String SCENARIO_SHEET_PATH = System.getProperty("user.dir")+"/resources/datafiles/TC_Master.xlsx";
-	//public final String SCENARIO_SHEET_PATH = System.getProperty("testCaseFile");
+	/////public final String SCENARIO_SHEET_PATH = System.getProperty("testCaseFile");
 	public final String ExtentReport_Path = System.getProperty("user.dir")+"/resources/reports/WebAutomationReport.html";
 	public final String ExcelReport_Path = System.getProperty("user.dir")+"/resources/reports/ExcelReport.xlsx";
 
@@ -141,7 +145,7 @@ public class TestDriver
 			org.jsoup.select.Elements tableRows = document.select("table tr");
 
 			Workbook workbook = new XSSFWorkbook();
-			Sheet sheet = workbook.createSheet("Report");
+			Sheet sheet = workbook.createSheet( "Report");
 
 			Row headerRow = sheet.createRow(0);
 			Cell testCaseNameHeader = headerRow.createCell(0);
@@ -183,7 +187,7 @@ public class TestDriver
 		for(int j=0;j<testCaseCount;j++) {
 			extentTest=extentreport.createTest(excel.getTCMaster().get(j).getTestCase());
 			int count = excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).size();
-			System.out.println("Number of TestCases to be Executing = "+count);
+			System.out.println("Number of TestSteps to be Executing = "+count);
 			for (int i = 0; i < count; i++) 
 			{
 				try {
@@ -418,6 +422,9 @@ public class TestDriver
 					case"SCROLL_TO_VISIBLE_ELEMENT":
 						element=commonUtils.getLocators(driver,excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getLocatorType().trim(), excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getLocatorValue().trim());
 						((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();", element);
+						System.out.println(excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getTestSteps().trim() +"--"+ excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getInputValue().trim());
+						extentTest.pass(excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getTestSteps().trim()+" : scrolled to visible element");
+
 						break;
 
 						//case"SLIDER":
