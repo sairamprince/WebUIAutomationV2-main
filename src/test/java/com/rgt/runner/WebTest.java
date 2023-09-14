@@ -12,7 +12,7 @@ import com.rgt.engine.TestDriver;
 public class WebTest
 {
 	//@Parameters("tc_master")
-	//public void runner(String tc_master) throws IOException, InterruptedException, DocumentException
+	//public void runner(String tc_master) throws IOException, InterruptedException, DocumentException;
 	 @Test
 	public void runner() throws IOException, InterruptedException, DocumentException
 	{
