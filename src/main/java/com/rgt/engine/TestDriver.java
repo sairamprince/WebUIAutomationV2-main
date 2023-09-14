@@ -15,9 +15,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import org.testng.IRetryAnalyzer;
-import org.testng.ITestResult;
-
 import com.aventstack.*;
 import com.aventstack.extentreports.io.BufferedWriterWriter;
 
@@ -101,7 +98,8 @@ public class TestDriver
 	Select selectDropDown;
 	Actions act;
 
-	public final String SCENARIO_SHEET_PATH = System.getProperty("user.dir")+"/resources/datafiles/TC_Master.xlsx";
+	public final String SCENARIO_SHEET_PATH = System.getenv("BUILD_ID");
+	//public final String SCENARIO_SHEET_PATH = System.getProperty("user.dir")+"/resources/datafiles/TC_Master.xlsx";
 	/////public final String SCENARIO_SHEET_PATH = System.getProperty("testCaseFile");
 	public final String ExtentReport_Path = System.getProperty("user.dir")+"/resources/reports/WebAutomationReport.html";
 	public final String ExcelReport_Path = System.getProperty("user.dir")+"/resources/reports/ExcelReport.xlsx";
@@ -566,7 +564,7 @@ public class TestDriver
 					SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd_HHmmss");
 					String timeandDate1 = dateFormat1.format(new Date());
 					String screenshotPath = "Failed-Screenshots/Failed_Screenshot_"+timeandDate1+".png";
-					File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+					File screenshotFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
 					String base64String = "";
 
 					try 

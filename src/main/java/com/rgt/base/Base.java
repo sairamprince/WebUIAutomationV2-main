@@ -28,7 +28,6 @@ public class Base {
 
 	public WebDriver init_driver(String browserName){
 		if(browserName.equals("chrome")){
-			WebDriverManager.chromedriver().setup();
 			driver = new ChromeDriver();
 			driver.manage().window().maximize();
 			driver.manage().deleteAllCookies();
