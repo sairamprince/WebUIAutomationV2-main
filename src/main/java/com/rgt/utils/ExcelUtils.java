@@ -25,7 +25,7 @@ public class ExcelUtils
 			String selectQuery = "select * from TC_Steps where TC_ID='"+TC_ID+"' and ToBeExecuted='Y'";
 			Recordset recordset = connection.executeQuery(selectQuery);
 
-			while (recordset.next()) {
+			while(recordset.next()) {
 				TestData data = new TestData();
 				data.setTC_ID(recordset.getField("TC_ID"));
 				data.setSteps(recordset.getField("Steps"));

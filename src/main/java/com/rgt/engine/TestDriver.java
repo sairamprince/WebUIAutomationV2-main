@@ -98,10 +98,10 @@ public class TestDriver
 	Select selectDropDown;
 	Actions act;
 
-	public final String SCENARIO_SHEET_PATH1 = System.getenv("resources/datafiles/TC_Master.xlsx");
-	public final String SCENARIO_SHEET_PATH = "/resources/datafiles/"+SCENARIO_SHEET_PATH1;
+//	public final String SCENARIO_SHEET_PATH1 = System.getenv("resources/datafiles/TC_Master.xlsx");
+	//public final String SCENARIO_SHEET_PATH = "/resources/datafiles/"+SCENARIO_SHEET_PATH1;
 	//public final String SCENARIO_SHEET_PATH = System.getenv("BUILD_ID");
-	//public final String SCENARIO_SHEET_PATH = System.getProperty("user.dir")+"/resources/datafiles/TC_Master.xlsx";
+	public final String SCENARIO_SHEET_PATH = System.getProperty("user.dir")+"/resources/datafiles/TC_Master.xlsx";
 	///public final String SCENARIO_SHEET_PATH = System.getProperty("testCaseFile");
 	public final String ExtentReport_Path = System.getProperty("user.dir")+"/resources/reports/WebAutomationReport.html";
 	public final String ExcelReport_Path = System.getProperty("user.dir")+"/resources/reports/ExcelReport.xlsx";
@@ -446,7 +446,7 @@ public class TestDriver
 					case"WINDOW_HANDLES_TO_CHILD":
 						element=commonUtils.getLocators(driver,excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getLocatorType().trim(), excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getLocatorValue().trim());
 						Set<String> windowIDs = driver.getWindowHandles();
-						List<String> windowsIDlist = new ArrayList(windowIDs);
+						List<String> windowsIDlist = new ArrayList<String>(windowIDs);
 
 						for(String windowID : windowsIDlist)
 						{
