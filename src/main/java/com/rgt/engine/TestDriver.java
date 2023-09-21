@@ -112,8 +112,8 @@ public class TestDriver
 		extentreport = new ExtentReports();
 		spark = new ExtentSparkReporter(ExtentReport_Path).viewConfigurer().viewOrder().as(new ViewName[] {ViewName.TEST,ViewName.DASHBOARD,ViewName.CATEGORY,ViewName.DEVICE,ViewName.EXCEPTION }).apply();
 		spark.config().setTheme(Theme.DARK);
-		spark.config().setDocumentTitle("Web UI Test");
-		spark.config().setReportName("Web UI Test Result");
+		spark.config().setDocumentTitle("Functional Test");
+		spark.config().setReportName("Functional Test Result");
 		spark.config().setProtocol(Protocol.HTTPS);
 		extentreport.setSystemInfo("username", "Sai Ram");
 		extentreport.attachReporter(spark);
@@ -581,13 +581,12 @@ public class TestDriver
 						FileUtils.copyFile(screenshotFile, new File(screenshotPath));
 					} catch (IOException e1) 
 					{
-						e1.printStackTrace();
+					e1.printStackTrace();
 					}
 					if (base64String != null) 
 					{
 						String base64ScreenshotPath = "<a href='data:image/png;base64," + base64String + "' data-featherlight='image'><img src='data:image/png;base64," + base64String + "'/></a>";
-						extentTest.fail(MarkupHelper.createLabel(base64ScreenshotPath, ExtentColor.RED));
-					}
+						extentTest.fail(MarkupHelper.createLabel(base64ScreenshotPath, ExtentColor.RED));					}
 					extentTest.fail(excel.getTestSteps(excel.getTCMaster().get(j).getTC_ID()).get(i).getTestSteps().trim() + " - Test case failed", MediaEntityBuilder.createScreenCaptureFromBase64String(base64String).build());
 				}
 				extentreport.flush();
