@@ -99,9 +99,10 @@ public class TestDriver
 	Actions act;
 
 	//public final String SCENARIO_SHEET_PATH = System.getProperty("user.dir")+"/resources/datafiles/TC_Master.xlsx";
+	public final String SCENARIO_SHEET_PATH = System.getProperty("user.dir")+"/TC_Master.xlsx";
 	public final String ExtentReport_Path = System.getProperty("user.dir")+"/resources/reports/WebAutomationReport.html";
 	public final String ExcelReport_Path = System.getProperty("user.dir")+"/resources/reports/ExcelReport.xlsx";
-	public final String SCENARIO_SHEET_PATH = System.getProperty("user.dir")+"/TC_Master.xlsx";
+	
 
 	public void startExecution() throws IOException, DocumentException {
 		 WebDriver driver=null;
