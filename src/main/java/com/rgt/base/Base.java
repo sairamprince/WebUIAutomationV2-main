@@ -34,7 +34,6 @@ public class Base {
 			driver = new ChromeDriver(options);
 			driver.manage().window().maximize();
 			driver.manage().deleteAllCookies();
-
 			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
 			
 		} else if(browserName.equalsIgnoreCase("firefox")){
